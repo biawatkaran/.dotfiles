@@ -2,7 +2,7 @@ alias aliases='bat ~/.bash_aliases --pager never && bat ~/.local/.bash_aliases -
 
 # for mac
 alias l='ls -lah --color=auto'
-alias ll='ls -lh --color=auto'
+#alias ll='ls -lh --color=auto'
 
 alias asl='aws sso login'
 alias b='bloop'
@@ -19,7 +19,7 @@ alias ipp='curl ifconfig.me && echo'
 alias jps='jps -lm'
 alias jpsk9='jps | fzf --reverse -m -e -i | cut -d " " -f1 | xargs kill -9 2>/dev/null'
 alias jpsk='jps | fzf --reverse -m -e -i | cut -d " " -f1 | xargs kill 2>/dev/null'
-alias k='kubectl'
+alias kc='kubectl'
 alias ld='lazydocker'
 alias list-colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
 alias new-install-repo='g8 git@github.com:agilesteel/install-seed.g8.git'

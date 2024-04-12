@@ -16,9 +16,13 @@
 	reflog = delta
 	show = delta
 [user]
-	email = agilesteel@gmail.com
-	name = Vladyslav Pekker
+	email = biawat.karan@gmail.com
+	name = Karan Biawat
 	signingKey = ~/.ssh/id_ed25519.pub
+[core]
+	editor = nvim
+[color]
+	ui = true	
 [pull]
 	rebase = true
 	twohead = ort

@@ -3,17 +3,39 @@ if [ -f "$HOME/.zshrc4mac" ] ; then
   source "$HOME/.zshrc4mac"
 fi
 
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# history
+HISTFILE=~/.zsh_history
+
+# source
+plug "$HOME/.config/zsh/aliases.zsh"
+plug "$HOME/.config/zsh/exports.zsh"
+plug "$HOME/.config/zsh/functions.zsh"
+
+# keybinds
+bindkey '^ ' autosuggest-accept
+if command -v bat &> /dev/null; then
+  alias cat="bat -pp --theme \"Visual Studio Dark+\"" 
+  alias catt="bat --theme \"Visual Studio Dark+\"" 
+fi
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -114,60 +136,22 @@ source $ZSH/oh-my-zsh.sh
 fpath=($HOME/.local/share/zsh/completions $fpath)
 
 # Enable the completion system
-autoload compinit
+autoload -U zmv
+autoload -U promptinit && promptinit
+autoload -U colors && colors
+autoload -Uz compinit && compinit
 
 # Initialize all completions on $fpath and ignore (-i) all insecure files and directories
 compinit -i
 
-# Refresh completions
-function refresh-completions() {
-  local DIR=$HOME/.local/share/zsh/completions
-
-  # bloop
-  curl -s https://raw.githubusercontent.com/scalacenter/bloop/master/etc/zsh-completions -o $DIR/_bloop
-
-  # cs
-  # cs --completions zsh > $DIR/_cs
-  # cs --completions zsh > $DIR/_coursier
-
-  # sed -i 's/#compdef cs/#compdef coursier/' $DIR/_coursier
-
-  # gh
-  gh completion -s zsh > $DIR/_gh
-
-  # scalafix
-  # scalafix --zsh > $DIR/_scalafix
-
-  # scalafmt
-  curl -s https://raw.githubusercontent.com/scalameta/scalafmt/master/bin/_scalafmt -o $DIR/_scalafmt
-}
-
-# >>> scala-cli completions >>>
-fpath=("$HOME/.local/share/scalacli/completions/zsh" $fpath)
-compinit
-# <<< scala-cli completions <<<
-
 # ──────────────────────────────────────────────────
-
+ # added by Nix installer
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
-fi # added by Nix installer
+fi
 
 if [ -d "$HOME/bin" ] ; then
   PATH="$PATH:$HOME/bin"
-fi
-
-# set PATH so it includes coursier bin if it exists
-if [ -d "$HOME/.local/share/coursier/bin" ] ; then
-  PATH="$PATH:$HOME/.local/share/coursier/bin"
-fi
-
-if [ -d "$HOME/Library/Application Support/Coursier/bin" ] ; then
-  PATH="$PATH:$HOME/Library/Application Support/Coursier/bin"
-fi
-
-if [ -e $HOME/.nix-profile/bin/java ]; then
-  export JAVA_HOME="${$(readlink -e $HOME/.nix-profile/bin/java)%*/bin/java}" 2>/dev/null
 fi
 
 export JAVA_TOOL_OPTIONS="
@@ -175,22 +159,6 @@ export JAVA_TOOL_OPTIONS="
 -Djava.net.preferIPv4Stack=true
 -Duser.timezone=UTC
 "
-
-# fzf
-export FZF_DEFAULT_COMMAND='fd --type f --color=never --hidden'
-export FZF_DEFAULT_OPTS='--no-height --color=bg+:#343d46,gutter:-1,pointer:#ff3c3c,info:#0dbc79,hl:#0dbc79,hl+:#23d18b'
-
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
-
-export FZF_ALT_C_COMMAND='fd --type d . --color=never --hidden'
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
-
-# MANPAGER
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export MANROFFOPT="-c"
-
-export LANG="C.UTF-8"
 
 if [[ $(command -v keychain) && -e ~/.ssh/id_rsa ]]; then
   eval `keychain --eval --quiet id_rsa`
@@ -209,53 +177,6 @@ fi
 if [ $(command -v starship) ]; then
   eval "$(starship init zsh)"
 fi
-
-# aliases
-alias v="vim"
-
-if [ $(command -v nvim) ]; then
-  export EDITOR=$(which nvim)
-  alias vim=$EDITOR
-  alias v=$EDITOR
-fi
-
-export SUDO_EDITOR=$EDITOR
-export VISUAL=$EDITOR
-
-# stow (th stands for target=home)
-stowth() {
-  stow -vSt ~ $1
-}
-
-unstowth() {
-  stow -vDt ~ $1
-}
-
-diy-install() {
-  wget -q https://script.install.devinsideyou.com/$1
-  sudo chmod +x $1 && ./$1 $2 $3
-}
-
-up_widget() {
-  BUFFER="cd .."
-  zle accept-line
-}
-
-zle -N up_widget
-bindkey "^\\" up_widget
-
-which-gc() {
-  jcmd $1 VM.info | grep -ohE "[^\s^,]+\sgc"
-}
-
-docker-armageddon() {
-  docker stop $(docker ps -aq) # stop containers
-  docker rm $(docker ps -aq) # rm containers
-  docker network prune -f # rm networks
-  docker rmi -f $(docker images --filter dangling=true -qa) # rm dangling images
-  docker volume rm $(docker volume ls --filter dangling=true -q) # rm volumes
-  docker rmi -f $(docker images -qa) # rm all images
-}
 
 # source global settings
 if [ -f "$HOME/.bash_aliases" ] ; then
@@ -278,3 +199,46 @@ fi
 if [ -f "$HOME/.local/.bash_aliases" ] ; then
   source "$HOME/.local/.bash_aliases"
 fi
+
+if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
+    install_powerline_precmd
+fi
+
+#########################################################
+# Not Using yet
+
+# plugins
+#plug "esc/conda-zsh-completion"
+#plug "zsh-users/zsh-autosuggestions"
+#plug "hlissner/zsh-autopair"
+#plug "zap-zsh/supercharge"
+#plug "zap-zsh/vim"
+#plug "zap-zsh/zap-prompt"
+#plug "zap-zsh/atmachine" 
+#plug "zap-zsh/fzf"
+#plug "zap-zsh/exa"
+#plug "zsh-users/zsh-syntax-highlighting"
+#plug "zsh-users/zsh-history-substring-search"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+#export SDKMAN_DIR="$HOME/.sdkman"
+#[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+#
+## bun completions
+#[ -s "/Users/chris/.bun/_bun" ] && source "/Users/chris/.bun/_bun"
+#
+## bun
+#export BUN_INSTALL="$HOME/.bun"
+#export PATH="$BUN_INSTALL/bin:$PATH"
+#
+## pnpm
+#export PNPM_HOME="/home/christian/.local/share/pnpm"
+#case ":$PATH:" in
+#  *":$PNPM_HOME:"*) ;;
+#  *) export PATH="$PNPM_HOME:$PATH" ;;
+#esac
+## pnpm end
+#
+## bun
+#export BUN_INSTALL="$HOME/.bun"
+#export PATH="$BUN_INSTALL/bin:$PATH"

@@ -45,3 +45,11 @@ mouse:
 key_bindings:
   - { key: F11, action: ToggleFullscreen }
   - { key: Slash, mods: Control, chars: "\x1f" }
+  - { key: V, mods: Control|Shift, action: Paste }
+  - { key: C, mods: Control|Shift, action: Copy }
+  - { key: Key0, mods: Control, action: ResetFontSize }
+  - { key: Equals, mods: Control, action: IncreaseFontSize }
+  - { key: Minus, mods: Control, action: DecreaseFontSize }
+  # - { key: Add, mods: Control, action: IncreaseFontSize }
+  # - { key: Subtract, mods: Control, action: DecreaseFontSize }
+  # - { key: N, mods: Control, action: SpawnNewInstance }

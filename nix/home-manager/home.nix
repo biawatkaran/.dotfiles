@@ -44,21 +44,34 @@ in {
       hello
       awscli2
       curl
-      docker
+      direnv
+      dive
+      #docker
+      fzf
+      git
+      go
       gnugrep
+      gum
+      htop
       jq
+      k9s
       kubectl
       kubernetes-helm
+      nerdctl
       rootlesskit
       poetry
       pipx
+      pre-commit
       python311
       python311Packages.pip
+      rootlesskit
       saml2aws
       slirp4netns
+      stow
       terraform
+      tree
       vim
-
+      zsh
       # # It is sometimes useful to fine-tune packages, for example, by applying
       # # overrides. You can do that directly here, just don't forget the
       # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -110,5 +123,21 @@ in {
   };
 
   # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  programs = {
+    home-manager.enable = true;
+    
+    #zsh = {
+    #  enable = true;
+    #  #enableCompletion = true;
+    #  #enableAutosuggestions = true;
+    #  dotDir = ".config/zsh";
+    #};
+
+    #direnv = {
+    #  enable = true;
+    #  enableBashIntegration = true;
+    #  nix-direnv.enable = true;
+    #};
+
+  };  
 }
