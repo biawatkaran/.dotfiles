@@ -10,26 +10,26 @@ export ZSH="$HOME/.oh-my-zsh"
 HISTFILE=~/.zsh_history
 
 # source
-plug "$HOME/.config/zsh/aliases.zsh"
-plug "$HOME/.config/zsh/exports.zsh"
-plug "$HOME/.config/zsh/functions.zsh"
+source "$HOME/.config/zsh/aliases.zsh"
+source "$HOME/.config/zsh/exports.zsh"
+source "$HOME/.config/zsh/functions.zsh"
 
 # keybinds
-bindkey '^ ' autosuggest-accept
+#bindkey '^ ' autosuggest-accept
 if command -v bat &> /dev/null; then
   alias cat="bat -pp --theme \"Visual Studio Dark+\"" 
   alias catt="bat --theme \"Visual Studio Dark+\"" 
 fi
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+#TODO
+#bindkey '^[[A' history-substring-search-up
+#bindkey '^[[B' history-substring-search-down
 
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
+#bindkey -M vicmd 'k' history-substring-search-up
+#bindkey -M vicmd 'j' history-substring-search-down
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -54,7 +54,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-DISABLE_UPDATE_PROMPT="true"
+#DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=1
@@ -104,7 +104,8 @@ plugins=(
   zsh-z
 )
 
-source $ZSH/oh-my-zsh.sh
+# TODO:
+#source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -136,9 +137,9 @@ source $ZSH/oh-my-zsh.sh
 fpath=($HOME/.local/share/zsh/completions $fpath)
 
 # Enable the completion system
-autoload -U zmv
-autoload -U promptinit && promptinit
-autoload -U colors && colors
+#autoload -U zmv
+#autoload -U promptinit && promptinit
+#autoload -U colors && colors
 autoload -Uz compinit && compinit
 
 # Initialize all completions on $fpath and ignore (-i) all insecure files and directories

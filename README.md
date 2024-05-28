@@ -10,7 +10,7 @@
   * now you can review flake.nix and home.nix files
   * once happy add --switch
 * Build: `nix build .#homeConfigurations.kbiawat.activationPackage`
-  * make changes in file, and running above will build aka store files in nix/store not activated or those packages e not available yet  
+  * make changes in file, and running above will build aka store files in nix/store not activated or those packages not available yet  
 * Activate:
   * `nix run home-manager/release-23.11 -- init ~/.dotfiles/nix/home-manager --switch`
   * (or) after nix build command symlink activation `results/activate`
@@ -44,3 +44,6 @@ wezterm/`
   * `stow -t ~ *` to symlink all the folders to home directory (by default its parent folder)
   * `stow -D -t ~ *` to remove symlinks
 
+## Troubleshooting
+* shell got f* up, then `wsl -d your-distro` from powershell should give you an exact error
+  * I messed up my zsh with nixos, so temp `wsl -d Ubuntu -e chsh` brought that back to life

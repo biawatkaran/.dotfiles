@@ -1,7 +1,7 @@
-if [ -f "$HOME/.zshrc" ] ; then
+if [[ -f "$HOME/.zshrc" ]]; then
   source "$HOME/.zshrc"
 fi
 
-if [ -f "$HOME/.local/.zprofile" ] ; then
+if [[ -f "$HOME/.local/.zprofile" ]] ; then
   source "$HOME/.local/.zprofile"
 fi

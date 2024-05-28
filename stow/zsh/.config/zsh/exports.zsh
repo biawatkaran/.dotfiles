@@ -1,7 +1,7 @@
 #!/bin/sh
 # HISTFILE="$XDG_DATA_HOME"/zsh/history
-HISTSIZE=1000000
-SAVEHIST=1000000
+HISTSIZE=10000
+SAVEHIST=10000
 
 if [ $(command -v nvim) ]; then
   export EDITOR=$(which nvim)
@@ -18,7 +18,7 @@ export MANPAGER='nvim +Man!'
 export MANWIDTH=999
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.local/share/go/bin:$PATH
-export GOPATH=$HOME/.local/share/go
+#export GOPATH=$HOME/.local/share/go
 export PATH=$HOME/.fnm:$PATH
 export PATH="$HOME/.local/share/neovim/bin":$PATH
 export PATH="$HOME/.local/share/bob/nvim-bin":$PATH
@@ -26,8 +26,8 @@ export XDG_CURRENT_DESKTOP="Wayland"
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 #export PATH="$PATH:./node_modules/.bin"
-eval "$(fnm env)"
-eval "$(zoxide init zsh)"
+#eval "$(fnm env)"
+#eval "$(zoxide init zsh)"
 # eval "`pip completion --zsh`"
 
 # fzf
@@ -64,7 +64,7 @@ export AWS_PROFILE=default
 #alias nerdctl=docker alias not needed when ln -s softlink created by below lines
 #in order to use docker simply comment this section and have docker installed too
 if [ -e $HOME/.nix-profile/bin/nerdctl ]; then
-  alias nerdctl=docker #alias not needed when ln -s softlink created by below lines
+  alias docker=nerdctl #alias not needed when ln -s softlink created by below lines
   export CNI_PATH=~/.local/libexec/cni
 fi
 

@@ -50,6 +50,24 @@ alias svc='kc get svc'
 alias ws='cd /c/Users/KBiawat/Shelf/Workspaces'
 alias sl='cd /c/Users/KBiawat/Shelf/Shitloads'
 
+# Nix
+alias din='echo "use nix" > .envrc && echo "watch_file nix/*" >> .envrc && di'
+alias nfu='nix flake update'
+alias nix-shell-q='echo -e ${buildInputs// /\\n} | cut -d - -f 2- | sort' # like nix-env -q
+alias nix-shell-qq='echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3' # like nix-env -q
+
+# Nix Home Manager
+alias hm='home-manager'
+alias hml='/c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles'
+alias hmd='cd /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager'
+alias hmgd='home-manager generations | head -n 2 | tac | cut -d " " -f 7 | xargs nix store diff-closures'
+alias hmp='home-manager packages'
+#home-manager switch --flake .#kbiawat, when you already in that directory
+alias hms='home-manager switch --flake /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager#kbiawat && hmgd'
+#alias hmu='nix flake update --flake /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager#kbiawat && hms'
+alias hmu='nix flake update && hms'
+alias hmhe='vi /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager/home.nix'
+
 case "$(uname -s)" in
 
 Darwin)

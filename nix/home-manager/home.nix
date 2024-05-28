@@ -42,10 +42,12 @@ in {
       # # Adds the 'hello' command to your environment. It prints a friendly
       # # "Hello, world!" when run.
       hello
+      # # You can install more packages by adding them to the list.
       awscli2
       curl
       direnv
       dive
+      dos2unix
       #docker
       fzf
       git
@@ -58,11 +60,12 @@ in {
       kubectl
       kubernetes-helm
       nerdctl
+      oh-my-zsh
       rootlesskit
       poetry
       pipx
       pre-commit
-      python311
+      python312
       python311Packages.pip
       rootlesskit
       saml2aws
@@ -126,12 +129,12 @@ in {
   programs = {
     home-manager.enable = true;
     
-    #zsh = {
-    #  enable = true;
-    #  #enableCompletion = true;
-    #  #enableAutosuggestions = true;
-    #  dotDir = ".config/zsh";
-    #};
+    /*zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      dotDir = ".config/zsh";
+    };*/
 
     #direnv = {
     #  enable = true;
