@@ -1,12 +1,19 @@
 # Using Dotfiles
 
+## Overall
+
+* Run Nix setup first
+  * you already have zsh installed with nix so `zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1`
+  * if you install ohmyzsh then also you need to rename bkp zshrc file etc, check troubleshooting section
+* Now run Stow setup based on what you need e.g. for zsh you might need to remove the auto generated zshrc file
+  * `mv ~/.zshrc ~/.zshrc.bak` and then `stow zsh -t ~` from the stow folder inside this repo 
 ## Nix Setup
 
 * sudo apt update && sudo apt -y full-upgrade && sudo apt -y autoremove
 * sh <(curl -L https://nixos.org/nix/install) --no-daemon
   * verify: nix-shell -p nix-info --run "nix-info -m"
   * echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
-* Run: `nix run home-manager/release-23.11 -- init ~/.dotfiles/nix/home-manager` (will create folder etc, --switch ll activate)
+* Run: `nix run home-manager/release-24.05 -- init ~/.dotfiles/nix/home-manager` (will create folder etc, --switch ll activate)
   * now you can review flake.nix and home.nix files
   * once happy add --switch
 * Build: `nix build .#homeConfigurations.kbiawat.activationPackage`
@@ -46,4 +53,12 @@ wezterm/`
 
 ## Troubleshooting
 * shell got f* up, then `wsl -d your-distro` from powershell should give you an exact error
-  * I messed up my zsh with nixos, so temp `wsl -d Ubuntu -e chsh` brought that back to life
+  * I messed up my zsh with nixos, 
+    * so temp `wsl -d Ubuntu -e chsh` brought that back to life by fixing problem
+    * /home/kbiawat/.nix-profile/bin/zsh itself was not present
+      * had to run Nix Setup section results/activate etc again, luckily /nix/store etc were already present
+      * ran zap again from Overall section that backedup my .zshrc file, i had to restore that
+* Installed ohmyzsh using nix
+  * "/nix/store/hg81kn8jkhgsq794z2mvcsxgppjrz5r0-oh-my-zsh-2024-05-03/share/oh-my-zsh" #found using `la /nix/store | grep oh-my-zsh`
+  * then `bin/install` did the ohmyzsh installation 
+  * then `mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc`

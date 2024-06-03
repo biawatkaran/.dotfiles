@@ -6,6 +6,8 @@ alias v="vim"
 alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 alias nvimrc='nvim ~/.config/nvim/'
 alias nman='bob'
+alias la='ls -altrh'
+alias gm='sudo apt update && sudo apt -y full-upgrade && sudo apt -y autoremove'
 # alias lvim="env TERM=wezterm lvim"
 # alias nvim="env TERM=wezterm nvim"
 
@@ -65,7 +67,7 @@ alias hmp='home-manager packages'
 #home-manager switch --flake .#kbiawat, when you already in that directory
 alias hms='home-manager switch --flake /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager#kbiawat && hmgd'
 #alias hmu='nix flake update --flake /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager#kbiawat && hms'
-alias hmu='nix flake update && hms'
+alias hmu='nix flake update && hms' # use hmd first as above did not work for some reason
 alias hmhe='vi /c/Users/KBiawat/Shelf/Workspaces/experiments/.dotfiles/nix/home-manager/home.nix'
 
 case "$(uname -s)" in

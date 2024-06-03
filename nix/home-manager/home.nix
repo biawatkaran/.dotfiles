@@ -44,11 +44,12 @@ in {
       hello
       # # You can install more packages by adding them to the list.
       awscli2
+#      containerd
       curl
       direnv
       dive
       dos2unix
-      #docker
+#      docker #check docker-setup function, installing directly
       fzf
       git
       go
@@ -59,22 +60,25 @@ in {
       k9s
       kubectl
       kubernetes-helm
-      nerdctl
+#      nerdctl
+#      nix-zsh-completions
       oh-my-zsh
-      rootlesskit
       poetry
       pipx
       pre-commit
       python312
       python311Packages.pip
-      rootlesskit
+#      runc
       saml2aws
       slirp4netns
       stow
       terraform
+      terraform-docs
+      tflint
       tree
       vim
       zsh
+#      zsh-completions
       # # It is sometimes useful to fine-tune packages, for example, by applying
       # # overrides. You can do that directly here, just don't forget the
       # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -128,13 +132,17 @@ in {
   # Let Home Manager install and manage itself.
   programs = {
     home-manager.enable = true;
-    
-    /*zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestion.enable = true;
-      dotDir = ".config/zsh";
-    };*/
+
+#    zsh = {
+#      enable = true;
+#      autocd = true;
+#      enableCompletion = true;
+#      autosuggestion.enable = true;
+#      dotDir = ".config/zsh";
+#      oh-my-zsh = {
+#        enable = true;
+#      };
+#    };
 
     #direnv = {
     #  enable = true;

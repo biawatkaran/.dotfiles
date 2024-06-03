@@ -71,8 +71,9 @@ function docker-armageddon() {
 }
 
 function powerline_precmd() {
- #PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh)"
- PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,git,kube,docker,exit,root)"
+#  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh)"
+#  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,git,kube,docker,exit,root)"
+  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,kube,docker,exit,root)"
 }
 
 function install_powerline_precmd() {
@@ -82,4 +83,74 @@ function install_powerline_precmd() {
     fi
    done
    precmd_functions+=(powerline_precmd)
+}
+
+
+function docker-nerd-setup() {
+
+  sudo apt install containerd
+
+  archType="amd64"
+  NERDCTL_VERSION="1.7.6"
+  LOCAL_NERDCTL_PATH=~/.local/bin/nerdctl
+
+  #Nerdctl did not work with nix so skipping tha below method for now, at the end building images failing with runc not on path even though it is
+  if false; then
+      # ensure nerdctl and cni are installed
+      LOCAL_NERDCTL_VERSION=$($NERDCTL_PATH --version 2>/dev/null)
+      NIX_NERDCTL_VERSION=$(echo $(nerdctl --version) | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+')
+
+      if [ ! -f $LOCAL_NERDCTL_PATH ] || [ $(nerdctl --version) != $LOCAL_NERDCTL_VERSION ]; then
+        NERDCTL_VERSION=$NIX_NERDCTL_VERSION
+      fi
+  fi
+
+  wget "https://github.com/containerd/nerdctl/releases/download/v${NERDCTL_VERSION}/nerdctl-full-${NERDCTL_VERSION}-linux-${archType}.tar.gz" -O /tmp/nerdctl.tar.gz
+  mkdir -p ~/.local/bin
+  tar -C ~/.local/bin/ -xzf /tmp/nerdctl.tar.gz --strip-components 1 bin/nerdctl
+  tar -C ~/.local -xzf /tmp/nerdctl.tar.gz libexec
+  tar -C ~/.local/bin/ -xzf /tmp/nerdctl.tar.gz --strip-components 1 bin/buildkitd bin/buildctl
+
+  #cp -f $(readlink $(whereis nerdctl)) $NERDCTL_PATH
+
+  sudo chown root $LOCAL_NERDCTL_PATH
+  sudo chmod +s $LOCAL_NERDCTL_PATH
+  export CNI_PATH=~/.local/libexec/cni
+  #some programs are specifically looking for a binary called "docker" in the $PATH so no need to alias
+  ln -s $LOCAL_NERDCTL_PATH ~/.local/bin/docker
+}
+
+funcation docker-nerd-start() {
+  sudo echo -n ; sudo "$(which containerd)" &
+  sudo chgrp "$(id -gn)" /run/containerd/containerd.sock
+  sudo $(which buildkitd) &
+}
+
+function docker-remove() {
+  # remove Docker
+  sudo apt autoremove docker-ce docker-ce-cli containerd.io
+  # remove the Docker Ubuntu repository
+  sudo rm /usr/share/keyrings/docker-archive-keyring.gpg /etc/apt/sources.list.d/docker.list
+}
+
+#https://docs.docker.com/engine/install/ubuntu/
+function docker-setup() {
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    sudo usermod -aG docker $USER
+    newgrp docker
 }

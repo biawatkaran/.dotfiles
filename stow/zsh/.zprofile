@@ -1,5 +1,5 @@
 if [[ -f "$HOME/.zshrc" ]]; then
-  source "$HOME/.zshrc"
+#   source "$HOME/.zshrc"
 fi
 
 if [[ -f "$HOME/.local/.zprofile" ]] ; then

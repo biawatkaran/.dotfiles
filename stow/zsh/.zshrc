@@ -1,41 +1,66 @@
+#!/bin/sh
+[ -f "$HOME/.local/share/zap/zap.zsh" ] && source "$HOME/.local/share/zap/zap.zsh"
+
 # source local settings
 if [ -f "$HOME/.zshrc4mac" ] ; then
   source "$HOME/.zshrc4mac"
 fi
 
+# typeset -U path cdpath fpath manpath
+#
+# for profile in ${(z)NIX_PROFILES}; do
+#   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
+# done
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
 
 # history
 HISTFILE=~/.zsh_history
 
 # source
-source "$HOME/.config/zsh/aliases.zsh"
-source "$HOME/.config/zsh/exports.zsh"
-source "$HOME/.config/zsh/functions.zsh"
-
-# keybinds
-#bindkey '^ ' autosuggest-accept
-if command -v bat &> /dev/null; then
-  alias cat="bat -pp --theme \"Visual Studio Dark+\"" 
-  alias catt="bat --theme \"Visual Studio Dark+\"" 
-fi
-
-#TODO
-#bindkey '^[[A' history-substring-search-up
-#bindkey '^[[B' history-substring-search-down
-
-#bindkey -M vicmd 'k' history-substring-search-up
-#bindkey -M vicmd 'j' history-substring-search-down
+plug "$HOME/.config/zsh/aliases.zsh"
+plug "$HOME/.config/zsh/exports.zsh"
+plug "$HOME/.config/zsh/functions.zsh"
+# plugins
+plug "zsh-users/zsh-autosuggestions"
+plug "zsh-users/zsh-syntax-highlighting"
+plug "zsh-users/zsh-history-substring-search"
+# plug "esc/conda-zsh-completion"
+# plug "hlissner/zsh-autopair"
+# plug "zap-zsh/supercharge"
+# plug "zap-zsh/vim"
+# plug "zap-zsh/zap-prompt"
+# plug "zap-zsh/fzf"
+# plug "zap-zsh/exa"
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+if command -v bat &> /dev/null; then
+  alias cat="bat -pp --theme \"Visual Studio Dark+\""
+  alias catt="bat --theme \"Visual Studio Dark+\""
+fi
+
+# keybinds
+bindkey "^[[3~" delete-char
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+# bindkey -M vicmd 'k' history-substring-search-up
+# bindkey -M vicmd 'j' history-substring-search-down
+# bindkey '^ ' autosuggest-accept
+
+# additonal options
+setopt autocd
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -96,16 +121,16 @@ export UPDATE_ZSH_DAYS=1
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  extract
   git
-  mosh
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  zsh-z
+  aws
+  kubectl
+  docker
+  helm
+  golang
+  jfrog
 )
 
-# TODO:
-#source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -134,16 +159,7 @@ plugins=(
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Setup a custom completions directory
-fpath=($HOME/.local/share/zsh/completions $fpath)
-
-# Enable the completion system
-#autoload -U zmv
-#autoload -U promptinit && promptinit
-#autoload -U colors && colors
-autoload -Uz compinit && compinit
-
-# Initialize all completions on $fpath and ignore (-i) all insecure files and directories
-compinit -i
+# fpath=($HOME/.local/share/zsh/completions $fpath)
 
 # ──────────────────────────────────────────────────
  # added by Nix installer
@@ -154,12 +170,6 @@ fi
 if [ -d "$HOME/bin" ] ; then
   PATH="$PATH:$HOME/bin"
 fi
-
-export JAVA_TOOL_OPTIONS="
--Dconfig.override_with_env_vars=true
--Djava.net.preferIPv4Stack=true
--Duser.timezone=UTC
-"
 
 if [[ $(command -v keychain) && -e ~/.ssh/id_rsa ]]; then
   eval `keychain --eval --quiet id_rsa`
@@ -205,21 +215,17 @@ if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
     install_powerline_precmd
 fi
 
+# Enable the completion system
+# autoload -U zmv
+# autoload -U promptinit && promptinit
+# autoload -U colors && colors
+autoload -Uz compinit && compinit
+complete -C aws_completer aws
+# autoload -U +X bashcompinit && bashcompinit
+# Initialize all completions on $fpath and ignore (-i) all insecure files and directories
+# compinit -i #Not using
 #########################################################
 # Not Using yet
-
-# plugins
-#plug "esc/conda-zsh-completion"
-#plug "zsh-users/zsh-autosuggestions"
-#plug "hlissner/zsh-autopair"
-#plug "zap-zsh/supercharge"
-#plug "zap-zsh/vim"
-#plug "zap-zsh/zap-prompt"
-#plug "zap-zsh/atmachine" 
-#plug "zap-zsh/fzf"
-#plug "zap-zsh/exa"
-#plug "zsh-users/zsh-syntax-highlighting"
-#plug "zsh-users/zsh-history-substring-search"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 #export SDKMAN_DIR="$HOME/.sdkman"
@@ -243,3 +249,4 @@ fi
 ## bun
 #export BUN_INSTALL="$HOME/.bun"
 #export PATH="$BUN_INSTALL/bin:$PATH"
+if [ -e /home/kbiawat/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kbiawat/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
