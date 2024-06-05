@@ -72,11 +72,14 @@ in {
       saml2aws
       slirp4netns
       stow
-      terraform
-      terraform-docs
+      tenv
       tflint
+      tfsec
+#      terraform
+      terraform-docs
       tree
       vim
+      wslu
       zsh
 #      zsh-completions
       # # It is sometimes useful to fine-tune packages, for example, by applying

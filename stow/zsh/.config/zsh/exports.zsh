@@ -8,9 +8,9 @@ if [ $(command -v nvim) ]; then
   alias vim=$EDITOR
   alias v=$EDITOR
 fi
-export SUDO_EDITOR=$EDITOR
-export VISUAL=$EDITOR
-export TERMINAL="kitty"
+#export SUDO_EDITOR=$EDITOR
+#export VISUAL=$EDITOR
+#export TERMINAL="kitty"
 # export BROWSER="firefox"
 export PATH="$HOME/.local/bin":$PATH
 export PATH="$HOME/.docker/bin":$PATH

@@ -49,13 +49,13 @@ function diy-install() {
   sudo chmod +x $1 && ./$1 $2 $3
 }
 
-function up_widget() {
-  BUFFER="cd .."
-  zle accept-line
-}
+#function up_widget() {
+#  BUFFER="cd .."
+#  zle accept-line
+#}
 
-zle -N up_widget
-bindkey "^\\" up_widget
+#zle -N up_widget
+#bindkey "^\\" up_widget
 
 function which-gc() {
   jcmd $1 VM.info | grep -ohE "[^\s^,]+\sgc"
@@ -72,8 +72,8 @@ function docker-armageddon() {
 
 function powerline_precmd() {
 #  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh)"
-#  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,git,kube,docker,exit,root)"
-  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,kube,docker,exit,root)"
+   PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,git,kube,docker,exit,root)"
+#  PS1="$($GOPATH/bin/powerline-go -error $? -shell zsh --shorten-eks-names -newline -mode compatible -modules cwd,perms,venv,aws,kube,docker,exit,root)"
 }
 
 function install_powerline_precmd() {
@@ -121,20 +121,18 @@ function docker-nerd-setup() {
 }
 
 funcation docker-nerd-start() {
-  sudo echo -n ; sudo "$(which containerd)" &
+#  sudo echo -n ; sudo "$(which containerd)" & #already running since we installed as part of docker-setup as ubuntu service
   sudo chgrp "$(id -gn)" /run/containerd/containerd.sock
   sudo $(which buildkitd) &
 }
 
-function docker-remove() {
-  # remove Docker
-  sudo apt autoremove docker-ce docker-ce-cli containerd.io
-  # remove the Docker Ubuntu repository
-  sudo rm /usr/share/keyrings/docker-archive-keyring.gpg /etc/apt/sources.list.d/docker.list
-}
-
 #https://docs.docker.com/engine/install/ubuntu/
 function docker-setup() {
+    # remove soft link to ~/.local/bin/docker if exists , it was created by docker-nerd-setup
+    if [ -L ~/.local/bin/docker ]; then
+      rm ~/.local/bin/docker
+    fi
+
     # Add Docker's official GPG key:
     sudo apt-get update
     sudo apt-get install ca-certificates curl
@@ -153,4 +151,11 @@ function docker-setup() {
 
     sudo usermod -aG docker $USER
     newgrp docker
+}
+
+function docker-remove() {
+  # remove Docker
+  sudo apt autoremove docker-ce docker-ce-cli containerd.io
+  # remove the Docker Ubuntu repository
+  sudo rm /usr/share/keyrings/docker-archive-keyring.gpg /etc/apt/sources.list.d/docker.list
 }

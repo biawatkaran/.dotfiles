@@ -2,14 +2,14 @@
 alias j='z'
 alias f='zi'
 alias g='lazygit'
-alias v="vim"
+# alias v="vim"
+# alias lvim="env TERM=wezterm lvim"
+# alias nvimrc='nvim ~/.config/nvim/'
+# alias nvim="env TERM=wezterm nvim"
 alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
-alias nvimrc='nvim ~/.config/nvim/'
 alias nman='bob'
 alias la='ls -altrh'
 alias gm='sudo apt update && sudo apt -y full-upgrade && sudo apt -y autoremove'
-# alias lvim="env TERM=wezterm lvim"
-# alias nvim="env TERM=wezterm nvim"
 
 # Remarkable
 alias remarkable_ssh='ssh root@10.11.99.1'

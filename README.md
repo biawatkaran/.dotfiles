@@ -7,6 +7,7 @@
   * if you install ohmyzsh then also you need to rename bkp zshrc file etc, check troubleshooting section
 * Now run Stow setup based on what you need e.g. for zsh you might need to remove the auto generated zshrc file
   * `mv ~/.zshrc ~/.zshrc.bak` and then `stow zsh -t ~` from the stow folder inside this repo 
+
 ## Nix Setup
 
 * sudo apt update && sudo apt -y full-upgrade && sudo apt -y autoremove
@@ -58,7 +59,8 @@ wezterm/`
     * /home/kbiawat/.nix-profile/bin/zsh itself was not present
       * had to run Nix Setup section results/activate etc again, luckily /nix/store etc were already present
       * ran zap again from Overall section that backedup my .zshrc file, i had to restore that
-* Installed ohmyzsh using nix
+* Installed ohmyzsh using nix (yes we could all do that via programs.zsh.ohmyzsh enabled etc, i wanted to have my own zsh file so not enabled in home.nix)
   * "/nix/store/hg81kn8jkhgsq794z2mvcsxgppjrz5r0-oh-my-zsh-2024-05-03/share/oh-my-zsh" #found using `la /nix/store | grep oh-my-zsh`
   * then `bin/install` did the ohmyzsh installation 
   * then `mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc`
+  * now you can enjoy ohmyzsh plugins with your own zshrc file
