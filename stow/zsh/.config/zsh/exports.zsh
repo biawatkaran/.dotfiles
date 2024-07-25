@@ -11,7 +11,8 @@ fi
 #export SUDO_EDITOR=$EDITOR
 #export VISUAL=$EDITOR
 #export TERMINAL="kitty"
-# export BROWSER="firefox"
+#export BROWSER="wslview"
+export BROWSER="/c/Program\ Files/Google/Chrome/Application/chrome.exe"
 export PATH="$HOME/.local/bin":$PATH
 export PATH="$HOME/.docker/bin":$PATH
 export MANPAGER='nvim +Man!'
@@ -52,7 +53,11 @@ export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 #export AWS_REGION=us-east-1
 #export AWS_PROFILE=default
 
-export OPENSSL_CONF=~/openssl.cnf
+#export OPENSSL_CONF=~/openssl.cnf
+export OPENSSL_CONF=/etc/ssl/openssl.cnf
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+export NIX_SSL_CERT_FILE=$SSL_CERT_FILE
+
 export GOPATH=/c/Users/KBiawat/Shelf/Workspaces/golang_ws
 export PATH=$PATH:$GOPATH:$GOPATH/bin
 

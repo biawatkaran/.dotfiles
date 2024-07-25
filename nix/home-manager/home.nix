@@ -43,6 +43,7 @@ in {
       # # "Hello, world!" when run.
       hello
       # # You can install more packages by adding them to the list.
+      ansible
       awscli2
 #      containerd
       curl
@@ -56,21 +57,24 @@ in {
       gnugrep
       gum
       htop
+      jfrog-cli
       jq
       k9s
       kubectl
+      kubelogin-oidc
+      kubectx
       kubernetes-helm
 #      nerdctl
 #      nix-zsh-completions
       oh-my-zsh
       poetry
       pipx
-      pre-commit
+#      pre-commit
       python312
-      python311Packages.pip
+#      python311Packages.pip
 #      runc
       saml2aws
-      slirp4netns
+#      slirp4netns
       stow
       tenv
       tflint
@@ -78,10 +82,13 @@ in {
 #      terraform
       terraform-docs
       tree
-      vim
-      wslu
-      zsh
-#      zsh-completions
+#      vim
+#      wslu
+      yamllint
+      xdg-utils
+#      zsh # caused some drv file issue and then omz was not able to update hence install sudo apt install zsh
+      zsh-autosuggestions #zsh-autocomplete don't need it as suggestions ones works
+      zsh-syntax-highlighting #makes better whilst typing on shell
       # # It is sometimes useful to fine-tune packages, for example, by applying
       # # overrides. You can do that directly here, just don't forget the
       # # parentheses. Maybe you want to install Nerd Fonts with a limited number of

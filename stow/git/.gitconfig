@@ -16,12 +16,15 @@
 	reflog = delta
 	show = delta
 [user]
-	email = biawat.karan@gmail.com
+	email = KBiawat@marketaxess.com
 	name = Karan Biawat
-	signingKey = ~/.ssh/id_ed25519.pub
+; 	signingKey = ~/.ssh/id_ed25519.pub
 [core]
 	editor = vim
-	autocrlf = true
+	autocrlf = input
+	filemode = false
+[http]
+        sslVerify = false
 [color]
 	ui = true	
 [pull]
@@ -68,9 +71,9 @@
 	recurse = true
 [maintenance]
 
-[gpg]
-	format = ssh
-[commit]
-	gpgsign = true
-[gpg "ssh"]
-	#allowedSignersFile = ~/.config/git/allowed-signers
+; [gpg]
+; 	format = ssh
+; [commit]
+; 	gpgsign = true
+; [gpg "ssh"]
+; 	#allowedSignersFile = ~/.config/git/allowed-signers

@@ -15,7 +15,6 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-
 # history
 HISTFILE=~/.zsh_history
 
@@ -24,9 +23,11 @@ plug "$HOME/.config/zsh/aliases.zsh"
 plug "$HOME/.config/zsh/exports.zsh"
 plug "$HOME/.config/zsh/functions.zsh"
 # plugins
+#commenting first three as giving dos2windows and add in home.nix
 plug "zsh-users/zsh-autosuggestions"
 plug "zsh-users/zsh-syntax-highlighting"
 plug "zsh-users/zsh-history-substring-search"
+
 # plug "esc/conda-zsh-completion"
 # plug "hlissner/zsh-autopair"
 # plug "zap-zsh/supercharge"
@@ -194,6 +195,7 @@ if [ -f "$HOME/.bash_aliases" ] ; then
   source "$HOME/.bash_aliases"
 fi
 
+# Need this for fuzzy finder
 if [ $(command -v fzf-share) ]; then
   source "$(fzf-share)/key-bindings.zsh"
   source "$(fzf-share)/completion.zsh"
@@ -249,4 +251,4 @@ complete -C aws_completer aws
 ## bun
 #export BUN_INSTALL="$HOME/.bun"
 #export PATH="$BUN_INSTALL/bin:$PATH"
-if [ -e /home/kbiawat/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kbiawat/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+# if [ -e /home/kbiawat/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kbiawat/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
