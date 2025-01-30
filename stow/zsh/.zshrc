@@ -18,15 +18,11 @@ export ZSH="$HOME/.oh-my-zsh"
 # history
 HISTFILE=~/.zsh_history
 
-# source
-plug "$HOME/.config/zsh/aliases.zsh"
-plug "$HOME/.config/zsh/exports.zsh"
-plug "$HOME/.config/zsh/functions.zsh"
 # plugins
 #commenting first three as giving dos2windows and add in home.nix
 plug "zsh-users/zsh-autosuggestions"
 plug "zsh-users/zsh-syntax-highlighting"
-plug "zsh-users/zsh-history-substring-search"
+# plug "zsh-users/zsh-history-substring-search"
 
 # plug "esc/conda-zsh-completion"
 # plug "hlissner/zsh-autopair"
@@ -45,17 +41,18 @@ if command -v bat &> /dev/null; then
 fi
 
 # keybinds
-bindkey "^[[3~" delete-char
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+#bindkey "^[[3~" delete-char
+#bindkey "^[[H" beginning-of-line
+#bindkey "^[[F" end-of-line
+#bindkey '^[[A' history-substring-search-up
+#bindkey '^[[B' history-substring-search-down
 # bindkey -M vicmd 'k' history-substring-search-up
 # bindkey -M vicmd 'j' history-substring-search-down
 # bindkey '^ ' autosuggest-accept
 
 # additonal options
 setopt autocd
+setopt HIST_IGNORE_ALL_DUPS
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -133,12 +130,17 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# source
+plug "$HOME/.config/zsh/aliases.zsh"
+plug "$HOME/.config/zsh/exports.zsh"
+plug "$HOME/.config/zsh/functions.zsh"
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -214,18 +216,24 @@ if [ -f "$HOME/.local/.bash_aliases" ] ; then
 fi
 
 if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
-    install_powerline_precmd
+    # install_powerline_precmd #remove powerline fonts
 fi
+
+# activate completion system
+autoload -Uz compinit
+compinit
+
+# for aws cli
+complete -C aws_completer aws
 
 # Enable the completion system
 # autoload -U zmv
 # autoload -U promptinit && promptinit
 # autoload -U colors && colors
-autoload -Uz compinit && compinit
-complete -C aws_completer aws
 # autoload -U +X bashcompinit && bashcompinit
 # Initialize all completions on $fpath and ignore (-i) all insecure files and directories
 # compinit -i #Not using
+
 #########################################################
 # Not Using yet
 

@@ -122,7 +122,7 @@ alias nix-shell-qq='echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3' # like
 # Nix Home Manager
 alias hm='home-manager'
 alias hmd='cd ~/.dotfiles/nix/home-manager'
-alias hmgd='home-manager generations | head -n 2 | tac | cut -d " " -f 7 | xargs nix store diff-closures'
+alias hmgd='home-manager generations | head -n 2 | tail -r | cut -d " " -f 7 | xargs nix store diff-closures'
 alias hmp='home-manager packages'
 alias hms='home-manager switch --flake ~/.dotfiles/nix/home-manager#vlad && hmgd'
 alias hmu='nix flake update ~/.dotfiles/nix/home-manager && hms'

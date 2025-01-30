@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = "kbiawat";
+  username = "mktxmac-kbiawat";
   fullname = "Karan Biawat";
   samlConfig = name: saml: ''
     [${name}]
@@ -25,7 +25,7 @@ in {
   # manage.
   home = {
     username = "${username}";
-    homeDirectory = "/home/${username}";
+    homeDirectory = "/Users/${username}";
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
@@ -34,7 +34,7 @@ in {
     # You should not change this value, even if you update Home Manager. If you do
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
-    stateVersion = "23.11"; # Please read the comment before changing.
+    stateVersion = "24.05"; # Please read the comment before changing.
 
     # The home.packages option allows you to install Nix packages into your
     # environment.
@@ -42,53 +42,81 @@ in {
       # # Adds the 'hello' command to your environment. It prints a friendly
       # # "Hello, world!" when run.
       hello
-      # # You can install more packages by adding them to the list.
+
       ansible
+      argocd
       awscli2
-#      containerd
-      curl
+      bat
+      buildkit
+      carapace
+      clojure
+      colima
+      cue
       direnv
       dive
-      dos2unix
-#      docker #check docker-setup function, installing directly
+      docker_27 #check docker-setup function, installing directly
+      earthly
+      eksctl
+      eza
+      fd
       fzf
       git
+      git-remote-codecommit
       go
       gnugrep
       gum
       htop
+      inetutils
+      jetbrains.goland
       jfrog-cli
+      jinja2-cli
       jq
       k9s
       kubectl
       kubelogin-oidc
       kubectx
       kubernetes-helm
-#      nerdctl
-#      nix-zsh-completions
+      libressl
+      nerd-fonts
+      nushell
       oh-my-zsh
-      poetry
+      openldap
       pipx
-#      pre-commit
+      pre-commit
       python312
-#      python311Packages.pip
-#      runc
-      saml2aws
-#      slirp4netns
+      starship
       stow
       tenv
-      tflint
-      tfsec
-#      terraform
-      terraform-docs
+      timoni
       tree
+      yamllint
+      yq
+      zellij
+################################################################
+#      You can install more packages by adding them to the list.
+#      containerd
+#      curl
+#      dos2unix
+#      lens
+#      lima
+#      nerdctl
+#      nix-zsh-completions
+#      poetry
+#      python311Packages.pip
+#      runc
+#      saml2aws
+#      slirp4netns
+#      tflint
+#      tfsec
+#      terraform
+#      terraform-docs
 #      vim
 #      wslu
-      yamllint
-      xdg-utils
+#      xdg-utils #open browser using aws so
 #      zsh # caused some drv file issue and then omz was not able to update hence install sudo apt install zsh
-      zsh-autosuggestions #zsh-autocomplete don't need it as suggestions ones works
-      zsh-syntax-highlighting #makes better whilst typing on shell
+#      zsh-autosuggestions #zsh-autocomplete don't need it as suggestions ones works, installed with zap
+#      zsh-syntax-highlighting #makes better whilst typing on shell, installed with zap
+
       # # It is sometimes useful to fine-tune packages, for example, by applying
       # # overrides. You can do that directly here, just don't forget the
       # # parentheses. Maybe you want to install Nerd Fonts with a limited number of

@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of kbiawat";
+  description = "Home Manager configuration of mktxmac-kbiawat";
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
@@ -15,12 +15,12 @@
     home-manager,
     ...
   }: let
-    system = "x86_64-linux";
+    system = "aarch64-darwin";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     formatter.${system} = pkgs.alejandra;
 
-    homeConfigurations."kbiawat" = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations."mktxmac-kbiawat" = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
       # Specify your home configuration modules here, for example,

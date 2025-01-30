@@ -62,12 +62,12 @@ function which-gc() {
 }
 
 function docker-armageddon() {
-  docker stop $(docker ps -aq) # stop containers
-  docker rm $(docker ps -aq) # rm containers
+  docker stop "$(docker ps -aq)" # stop containers
+  docker rm "$(docker ps -aq)" # rm containers
   docker network prune -f # rm networks
-  docker rmi -f $(docker images --filter dangling=true -qa) # rm dangling images
-  docker volume rm $(docker volume ls --filter dangling=true -q) # rm volumes
-  docker rmi -f $(docker images -qa) # rm all images
+  docker rmi -f "$(docker images --filter dangling=true -qa)" # rm dangling images
+  docker volume rm "$(docker volume ls --filter dangling=true -q)" # rm volumes
+  docker rmi -f "$(docker images -qa)" # rm all images
 }
 
 function powerline_precmd() {
@@ -98,9 +98,9 @@ function docker-nerd-setup() {
   if false; then
       # ensure nerdctl and cni are installed
       LOCAL_NERDCTL_VERSION=$($NERDCTL_PATH --version 2>/dev/null)
-      NIX_NERDCTL_VERSION=$(echo $(nerdctl --version) | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+')
+      NIX_NERDCTL_VERSION=$(nerdctl --version | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+')
 
-      if [ ! -f $LOCAL_NERDCTL_PATH ] || [ $(nerdctl --version) != $LOCAL_NERDCTL_VERSION ]; then
+      if [ ! -f $LOCAL_NERDCTL_PATH ] || [ "$(nerdctl --version)" != $LOCAL_NERDCTL_VERSION ]; then
         NERDCTL_VERSION=$NIX_NERDCTL_VERSION
       fi
   fi
@@ -120,10 +120,10 @@ function docker-nerd-setup() {
   ln -s $LOCAL_NERDCTL_PATH ~/.local/bin/docker
 }
 
-funcation docker-nerd-start() {
+function docker-nerd-start() {
 #  sudo echo -n ; sudo "$(which containerd)" & #already running since we installed as part of docker-setup as ubuntu service
   sudo chgrp "$(id -gn)" /run/containerd/containerd.sock
-  sudo $(which buildkitd) &
+  sudo "$(which buildkitd)" &
 }
 
 #https://docs.docker.com/engine/install/ubuntu/
@@ -158,4 +158,58 @@ function docker-remove() {
   sudo apt autoremove docker-ce docker-ce-cli containerd.io
   # remove the Docker Ubuntu repository
   sudo rm /usr/share/keyrings/docker-archive-keyring.gpg /etc/apt/sources.list.d/docker.list
+}
+
+function assume_profile() {
+  local aws_profile=$1
+  # remove the old creds
+  rm -Rf ~/.aws/cli/cache
+
+  # assume the role using provided profile
+  aws --profile $aws_profile sts get-caller-identity| jq . > /dev/null 2>&1
+
+  # current session updated to that aws profile
+  eval $(
+    sh -c "ls ~/.aws/cli/cache/*.json | head -n1 | xargs cat | jq -r '.Credentials + {Version: 1}'" | \
+    jq -r '
+      . |
+      "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\n" +
+      "export AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\n" +
+      "export AWS_SESSION_TOKEN=\(.SessionToken)\n" +
+      "export AWS_SECURITY_TOKEN=\(.SessionToken)"
+    '
+  )
+
+  # verifying
+  aws sts get-caller-identity | jq .
+}
+
+function assume_role_arn() {
+  local role_arn=$1
+  local role_session_name=$2
+
+  eval $(
+    aws sts assume-role --role-arn $role_arn \
+        --role-session-name $role_session_name --output json | \
+        jq -r '
+              .Credentials |
+              "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\n" +
+              "export AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\n" +
+              "export AWS_SESSION_TOKEN=\(.SessionToken)\n" +
+              "export AWS_SECURITY_TOKEN=\(.SessionToken)"
+            '
+  )
+
+  # verifying
+  aws sts get-caller-identity | jq .
+}
+
+function lets_aft() {
+    assume_profile mktx-ct-core-aft_CloudBreakglassRole
+
+    local aws_account_id=<ACT>
+    local aws_account_role=AWSAFTAdmin
+
+    local aft_admin_arn=arn:aws:iam::${aws_account_id}:role/${aws_account_role}
+    assume_role_arn $aft_admin_arn aft
 }
