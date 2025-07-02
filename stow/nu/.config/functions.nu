@@ -1,5 +1,49 @@
 #!/usr/bin/env nu
 
+# Activate a python virtual environment venv_activate <name-of-venv>
+#
+# If a folder containing `venv` is found as a child of the current dir,
+# this script is searching for the `<folder>/bin/activate.nu` script.
+# If multiple folder are found, the user is asked to chose which one
+# he wants to use.
+def venv_activate [venv] {
+    use std log
+    let venvs = (ls | where type == dir | where ($it.name | str contains $venv) | get name)
+    if ( $venvs | is-empty ) {
+        log warning "There are no virtualenv in this folder"
+    } else {
+        if ( ($venvs | length) == 1) {
+            let venv_name = ($venvs | first)
+            let venv_activation_file = ($env.pwd | path join $venv_name bin activate.nu)
+            nu -e $"overlay use ($venv_activation_file) as ($venv_name)"
+            log warning $"overlay done use ($venv_activation_file) as ($venv_name)"
+        } else {
+            print "The following venvs are available:"
+            let choice = chose_one_in_list $venvs
+            let venv_activation_file = ($env.pwd | path join $choice bin activate.nu)
+            nu -e $"overlay use ($venv_activation_file) as ($choice)"
+        }
+    }
+}
+
+# deactivate the virtual environment venv_deactivate <name-of-venv>
+def venv_deactivate [venv] {
+   use std log
+   let venvs = (ls | where type == dir | where ($it.name | str contains $venv) | get name)
+   if ( $venvs | is-empty ) {
+       log warning "There are no virtualenv in this folder"
+   } else {
+       if ( ($venvs | length) == 1) {
+           let venv_name = ($venvs | first)
+           nu -e $"overlay hide ($venv_name)"
+       } else {
+           print "The following venvs are available:"
+           let choice = chose_one_in_list $venvs
+           nu -e $"overlay hide ($choice)"
+       }
+   }
+}
+
 # System
 do --env {
     let ssh_agent_file = (
@@ -84,109 +128,95 @@ def git_branch_cleanup [] {
 #######################################################################
 # stow (th stands for target=home)
 def stowth [config] {
-  stow -vSt ~ $config
+    stow -vSt ~ $config
 }
 
 def unstowth [config] {
-  stow -vDt ~ $config
+    stow -vDt ~ $config
 }
 
 
 # Docker
 #######################################################################
 def docker-armageddon [] {
-  docker stop "$(docker ps -aq)" # stop containers
-  docker rm "$(docker ps -aq)" # rm containers
-  docker network prune -f # rm networks
-  docker rmi -f "$(docker images --filter dangling=true -qa)" # rm dangling images
-  docker volume rm "$(docker volume ls --filter dangling=true -q)" # rm volumes
-  docker rmi -f "$(docker images -qa)" # rm all images
+    docker stop "$(docker ps -aq)" # stop containers
+    docker rm "$(docker ps -aq)" # rm containers
+    docker network prune -f # rm networks
+    docker rmi -f "$(docker images --filter dangling=true -qa)" # rm dangling images
+    docker volume rm "$(docker volume ls --filter dangling=true -q)" # rm volumes
+    docker rmi -f "$(docker images -qa)" # rm all images
 }
 
 # AWS
 #######################################################################
+# _aws_creds: helper function to format the aws creds
+def _aws_creds [aws_creds] {
+    {
+      "AWS_ACCESS_KEY_ID": $aws_creds.AccessKeyId,
+      "AWS_SECRET_ACCESS_KEY": $aws_creds.SecretAccessKey,
+      "AWS_SESSION_TOKEN": $aws_creds.SessionToken,
+      "AWS_SECURITY_TOKEN": $aws_creds.SessionToken
+    }
+}
+
 #load_current_aws_creds: use `load_current_aws_creds | load-env` loads the current aws cred role in your current session
 def load_current_aws_creds [] {
-  let current_aws_creds = ls ~/.aws/cli/cache/*.json
-                      | sort-by modified
-                      | reverse
-                      | ( get name | first )
-                      | open $in
-                      | get Credentials
+    let current_aws_creds = ls ~/.aws/cli/cache/*.json
+                        | sort-by modified
+                        | reverse
+                        | ( get name | first )
+                        | open $in
+                        | get Credentials
 
-  {"AWS_ACCESS_KEY_ID": $current_aws_creds.AccessKeyId, "AWS_SECRET_ACCESS_KEY": $current_aws_creds.SecretAccessKey
-  , "AWS_SESSION_TOKEN": $current_aws_creds.SessionToken, "AWS_SECURITY_TOKEN": $current_aws_creds.SessionToken }
+    _aws_creds $current_aws_creds
 }
 
 # load_aws_profile: use `load_aws_profile | load-env` loads the current aws profile in your current session
 def load_aws_profile [profile] {
 
-  # remove the old creds
-  rm -rf ~/.aws/cli/cache
+    # remove the old creds
+    rm -rf ~/.aws/cli/cache
 
-  # assume the role using provided profile
-  aws --profile $profile sts get-caller-identity | from json
+    # assume the role using provided profile and verify by printing the current session
+    aws --profile $profile sts get-caller-identity | from yaml | print $in
 
-  let current_aws_creds = ls ~/.aws/cli/cache/*.json
-                      | sort-by modified
-                      | reverse
-                      | ( get name | first )
-                      | open $in
-                      | get Credentials
+    #$"export AWS_ACCESS_KEY_ID=($current_aws_creds.AccessKeyId)\n" | save --append .env
+    #$"export AWS_SECRET_ACCESS_KEY=($current_aws_creds.SecretAccessKey)\n" | save --append .env
+    #$"export AWS_SESSION_TOKEN=($current_aws_creds.SessionToken)\n" | save --append .env
+    #$"export AWS_SECURITY_TOKEN=($current_aws_creds.SessionToken)\n" | save --append .env
 
-  #print $current_aws_creds
-
-  # current session updated to that aws profile within this function scope
-  load-env {
-    "AWS_ACCESS_KEY_ID": $current_aws_creds.AccessKeyId,
-    "AWS_SECRET_ACCESS_KEY": $current_aws_creds.SecretAccessKey,
-    "AWS_SESSION_TOKEN": $current_aws_creds.SessionToken,
-    "AWS_SECURITY_TOKEN": $current_aws_creds.SessionToken,
-  }
-
-  #$"export AWS_ACCESS_KEY_ID=($current_aws_creds.AccessKeyId)\n" | save --append .env
-  #$"export AWS_SECRET_ACCESS_KEY=($current_aws_creds.SecretAccessKey)\n" | save --append .env
-  #$"export AWS_SESSION_TOKEN=($current_aws_creds.SessionToken)\n" | save --append .env
-  #$"export AWS_SECURITY_TOKEN=($current_aws_creds.SessionToken)\n" | save --append .env
-
-  # verifying
-  aws sts get-caller-identity | to yaml
-
-  {"AWS_ACCESS_KEY_ID": $current_aws_creds.AccessKeyId, "AWS_SECRET_ACCESS_KEY": $current_aws_creds.SecretAccessKey
-    , "AWS_SESSION_TOKEN": $current_aws_creds.SessionToken, "AWS_SECURITY_TOKEN": $current_aws_creds.SessionToken }
+    # As above AWS creds are still within this function scope,
+    # return the aws profile session to the current terminal to invoke this function with | load-env
+    load_current_aws_creds
 }
 
-## load_aws_assume_role_arn: use `load_aws_assume_role_arn | load-env` using parent aws_profile assume the target_aws_assume_role_arn
-def load_aws_assume_role_arn [aws_profile target_aws_assume_role_arn role_session_name ] {
-  let assumed_aws_creds = aws --profile $aws_profile sts assume-role --role-arn $target_aws_assume_role_arn --role-session-name $role_session_name
-                          | from json
-                          | get Credentials
+# load_aws_assume_role_arn: use `load_aws_assume_role_arn assume_role assume_session | load-env`
+# using parent aws_profile, assume the target_aws_assume_role_arn
+def load_aws_assume_role_arn [target_aws_assume_role_arn role_session_name] {
+    let assumed_aws_creds = aws sts assume-role --role-arn $target_aws_assume_role_arn --role-session-name $role_session_name
+                            | from json
+                            | get Credentials
 
-  #print $assumed_aws_creds
+    #print $assumed_aws_creds
 
-  # current session updated to that aws profile within this function scope
-  load-env {
-      "AWS_ACCESS_KEY_ID": $assumed_aws_creds.AccessKeyId,
-      "AWS_SECRET_ACCESS_KEY": $assumed_aws_creds.SecretAccessKey,
-      "AWS_SESSION_TOKEN": $assumed_aws_creds.SessionToken,
-      "AWS_SECURITY_TOKEN": $assumed_aws_creds.SessionToken,
-  }
+    # current session updated to that assumed aws role within this function scope
+    _aws_creds $assumed_aws_creds | load-env
+    # verifying, its actually the assume role now
+    aws sts get-caller-identity | from yaml | print $in
 
-  # verifying
-  aws sts get-caller-identity | to yaml
-
-  {"AWS_ACCESS_KEY_ID": $assumed_aws_creds.AccessKeyId, "AWS_SECRET_ACCESS_KEY": $assumed_aws_creds.SecretAccessKey
-    , "AWS_SESSION_TOKEN": $assumed_aws_creds.SessionToken, "AWS_SECURITY_TOKEN": $assumed_aws_creds.SessionToken }
+    # return the assume role session to the current terminal to invoke this function with | load-env
+    _aws_creds $assumed_aws_creds
 }
 
-# lets_aft: use `lets_aft | load-env` loads the AWSAFTAdmin assumed role in your current session
+# lets_aft: use lets_aft | load-env loads the AWSAFTAdmin assumed role in your current session
 # uses CloudBreakglassRole to assume AWSAFTAdmin role
 def lets_aft [] {
-    load_aws_profile "mktx-ct-core-aft_CloudBreakglassRole"
+    # assume AFT_CloudBreakglassRole
+    load_aws_profile <> | load-env
 
     let aws_account_id = <>
     let aws_account_role = "AWSAFTAdmin"
 
-    let aft_admin_assume_role_arn = ["arn:aws:iam::" $aws_account_id ":role/" $aws_account_role] | str join
-    load_aws_assume_role_arn "mktx-ct-core-aft_CloudBreakglassRole" $aft_admin_assume_role_arn aft
+    let aft_admin_assume_role_arn = [arn:aws:iam:: $aws_account_id :role/ $aws_account_role] | str join
+    load_aws_assume_role_arn $aft_admin_assume_role_arn aft
 }

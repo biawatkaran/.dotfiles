@@ -48,13 +48,13 @@ in {
       awscli2
       bat
       buildkit
-      carapace
+#      carapace #latest version not available on nix yet, broke nu from zsh
       clojure
       colima
       cue
       direnv
       dive
-      docker_27 #check docker-setup function, installing directly
+      docker_28 #check docker-setup function, installing directly
       earthly
       eksctl
       eza
@@ -72,23 +72,26 @@ in {
       jinja2-cli
       jq
       k9s
+      kcl
+      kind
       kubectl
       kubelogin-oidc
       kubectx
       kubernetes-helm
+      kyverno
       libressl
-      nerd-fonts
       nushell
       oh-my-zsh
       openldap
       pipx
       pre-commit
-      python312
+      python313
       starship
       stow
-      tenv
+      tenv # install tenv and then manage underlying terraform versions with it, hit `tenv` in cmd and follow cmds
       timoni
       tree
+      virtualenv
       yamllint
       yq
       zellij

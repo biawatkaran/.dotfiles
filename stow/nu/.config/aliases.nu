@@ -9,6 +9,16 @@ alias nman = bob
 # alias remarkable_ssh='ssh root@10.11.99.1'
 # alias restream='restream -p'
 
+# Colorize grep output (good for log files)
+alias grep = grep --color=auto
+alias egrep = egrep --color=auto
+alias fgrep = fgrep --color=auto
+
+# daily used ones
+alias ll = ls -al
+alias cat = bat --paging never --theme DarkNeon --style plain
+alias check = fzf --preview 'bat --style numbers --color always {}\'
+
 # custom shortcuts
 alias tf = terraform
 
@@ -31,7 +41,3 @@ alias hmd = cd /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager
 alias stwd = cd /Users/mktxmac-kbiawat/Developer/.dotfiles/stow
 alias hme = vi /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager/home.nix
 alias hmp = home-manager packages
-
-# check functions.nu for hmu
-#alias hmu='nix flake update --flake /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager#mktxmac-kbiawat && hms'
-
