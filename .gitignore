@@ -30,3 +30,8 @@ terraform.rc
 .idea/**
 environments/local.tfvars
 backend.tf
+
+/.config/fabric/.env
+/kubeconfig.yaml
+/something.png
+/dotfiles
