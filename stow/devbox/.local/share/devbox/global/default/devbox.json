@@ -1,23 +1,24 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.11.0/.schema/devbox.schema.json",
   "packages": {
-    "kind": "latest",
-    "gh":   "latest",
-    "starship": "latest",
     "bat": "latest",
-    "zoxide": "latest",
-    "fzf": "latest",
+    "carapace": "latest",
     "eza": "latest",
-    "thefuck": "latest",
+    "fzf": "latest",
+    "gh":   "latest",
     "git": "latest",
-    "kubectl": "latest",
-    "k9s": "latest",
-    "kubectx": "latest",
-    "nushell": "latest",
     "helm": {
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin"]
-    }
+    },
+    "kind": "latest",
+    "k9s": "latest",
+    "kubectl": "latest",
+    "kubectx": "latest",
+    "nushell": "latest",
+    "starship": "latest",
+    "thefuck": "latest",
+    "zoxide": "latest"
   },
   "shell": {
     "init_hook": [],

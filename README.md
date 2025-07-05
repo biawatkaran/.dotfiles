@@ -76,12 +76,14 @@ wezterm/`
 
 ## Devbox Way
 
-* install git and homebrew first
+* install git,homebrew,zap-zsh first
 * git clone this repo on local at ~ directory
   * run ./install.sh
   * make sure you can the zap separately, its at the bottom of that install.sh file
 * run `devbox shell` so that all the tools devbox.json get installed
 * now run ./sync.sh
+* any tool needed at the global level, add that into `stow/devbox.json` and then run `refresh-global`
+  * dbgu alias is created to update
 
 
 

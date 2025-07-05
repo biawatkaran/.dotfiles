@@ -31,6 +31,10 @@ alias svc = kubectl get svc
 alias ws = cd /Users/mktxmac-kbiawat/Developer/workspaces
 alias sl = cd /Users/mktxmac-kbiawat/Developer/Shitloads
 
+# Devbox
+alias dbu = devbox update 
+alias dbgu = devbox global update
+
 ## Nix
 alias nfu = nix flake update
 

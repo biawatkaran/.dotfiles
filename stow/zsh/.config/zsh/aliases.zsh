@@ -63,6 +63,7 @@ alias nix-shell-qq='echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3' # like
 
 # Devbox
 alias dbu='devbox update'
+alias dbgu='devbox global update && refresh-global'
 
 # Nix Home Manager
 alias hm='home-manager'

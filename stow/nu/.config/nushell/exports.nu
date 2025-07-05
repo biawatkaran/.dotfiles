@@ -32,21 +32,22 @@ def load_exports [] {
 
         #####################################################################
         #                             Certs                                 #
+        #    commented for local machine, check at corporate level          #
         #####################################################################
-        "CERT_FILE": "/etc/nix/ca_cert.pem"
+        #"CERT_FILE": "/etc/nix/ca_cert.pem"
 
         #AWS
-        "AWS_CA_BUNDLE": "/etc/nix/ca_cert.pem"
+        #"AWS_CA_BUNDLE": "/etc/nix/ca_cert.pem"
 
         #OpenSSL
-        "OPENSSL_CONF": "/etc/ssl/openssl.cnf"
-        "SSL_CERT_FILE": $env.CERT_FILE
+        #"OPENSSL_CONF": "/etc/ssl/openssl.cnf"
+        #"SSL_CERT_FILE": $env.CERT_FILE
 
         #Nix
-        "NIX_SSL_CERT_FILE": $env.CERT_FILE
+        #"NIX_SSL_CERT_FILE": $env.CERT_FILE
 
         #Python
-        "REQUESTS_CA_BUNDLE": $env.CERT_FILE
+        #"REQUESTS_CA_BUNDLE": $env.CERT_FILE
 
 
         ####### Python #######
