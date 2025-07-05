@@ -48,11 +48,12 @@ alias tf=terraform
 alias kc=kubectl
 alias kns=kubens
 alias kctx=kubectx
+alias kubectl='kubecolor'
 alias po='kc get pods -o wide'
 alias all='kc get all'
 alias svc='kc get svc'
-alias ws='cd /Users/mktxmac-kbiawat/Developer/workspaces'
-alias sl='/Users/mktxmac-kbiawat/Developer/Shitloads'
+alias ws='cd /Users/ikaran/Shelf/workspaces'
+alias sl='/Users/ikaran/Shelf/Shitloads'
 
 # Nix
 alias din='echo "use nix" > .envrc && echo "watch_file nix/*" >> .envrc && di'
@@ -60,19 +61,22 @@ alias nfu='nix flake update'
 alias nix-shell-q='echo -e ${buildInputs// /\\n} | cut -d - -f 2- | sort' # like nix-env -q
 alias nix-shell-qq='echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3' # like nix-env -q
 
+# Devbox
+alias dbu='devbox update'
+
 # Nix Home Manager
 alias hm='home-manager'
-alias dot='/Users/mktxmac-kbiawat/Developer/.dotfiles'
-alias hmd='cd /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager'
-alias stwd='cd /Users/mktxmac-kbiawat/Developer/.dotfiles/stow'
-alias hme='vi /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager/home.nix'
+alias dot='/Users/ikaran/.dotfiles'
+alias hmd='cd /Users/ikaran/.dotfiles/nix/home-manager'
+alias stwd='cd /Users/ikaran/.dotfiles/stow'
+alias hme='vi /Users/ikaran/.dotfiles/nix/home-manager/home.nix'
 alias hmp='home-manager packages'
 alias hmgd='home-manager generations | head -n 2 | tail -r | cut -d " " -f 7 | xargs nix store diff-closures'
 
 #home-manager switch --flake .#mktxmac-kbiawat, when you already in that directory
-alias hms='home-manager switch --flake /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager#mktxmac-kbiawat && hmgd'
+alias hms='home-manager switch --flake /Users/ikaran/.dotfiles/nix/home-manager#mktxmac-kbiawat && hmgd'
 
-#alias hmu='nix flake update --flake /Users/mktxmac-kbiawat/Developer/.dotfiles/nix/home-manager#mktxmac-kbiawat && hms'
+#alias hmu='nix flake update --flake /Users/ikaran/.dotfiles/nix/home-manager#mktxmac-kbiawat && hms'
 alias hmu='hmd && nfu && hms' # use hmd first as above did not work for some reason
 
 case "$(uname -s)" in

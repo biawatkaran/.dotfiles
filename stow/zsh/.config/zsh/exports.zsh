@@ -2,6 +2,11 @@
 # HISTFILE="$XDG_DATA_HOME"/zsh/history
 HISTSIZE=10000
 SAVEHIST=10000
+# history
+HISTFILE=~/.zsh_history
+
+# If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 if [ $(command -v nvim) ]; then
   export EDITOR=$(which nvim)
@@ -97,28 +102,29 @@ export LANG="C.UTF-8"
 
 #####################################################################
 #                             Certs                                 #
+#        Commented out as using in local machine                    #
 #####################################################################
-#export CERT_FILE=/etc/ssl/certs/ca-certificates.crt #windows wsl
-export CERT_FILE=/etc/nix/ca_cert.pem #mac&Nix working
-#export CERT_FILE=/etc/nix/ca_cert.crt #mac&Nix did not work
-#export CERT_FILE=/etc/nix/ca-certificates.crt #mac&Nix need to get this file via
+# #export CERT_FILE=/etc/ssl/certs/ca-certificates.crt #windows wsl
+# export CERT_FILE=/etc/nix/ca_cert.pem #mac&Nix working
+# #export CERT_FILE=/etc/nix/ca_cert.crt #mac&Nix did not work
+# #export CERT_FILE=/etc/nix/ca-certificates.crt #mac&Nix need to get this file via
 
-## AWS
-#export AWS_PROFILE=default
-#export AWS_REGION=us-east-1
-#export AWS_CA_BUNDLE=$CERT_FILE
-export AWS_CA_BUNDLE=/etc/nix/ca_cert.pem
+# ## AWS
+# #export AWS_PROFILE=default
+# #export AWS_REGION=us-east-1
+# #export AWS_CA_BUNDLE=$CERT_FILE
+# export AWS_CA_BUNDLE=/etc/nix/ca_cert.pem
 
-## OpenSSL
-#export OPENSSL_CONF=~/openssl.cnf
-export OPENSSL_CONF=/etc/ssl/openssl.cnf
-export SSL_CERT_FILE=$CERT_FILE
+# ## OpenSSL
+# #export OPENSSL_CONF=~/openssl.cnf
+# export OPENSSL_CONF=/etc/ssl/openssl.cnf
+# export SSL_CERT_FILE=$CERT_FILE
 
-## Nix
-export NIX_SSL_CERT_FILE=$CERT_FILE
+# ## Nix
+# export NIX_SSL_CERT_FILE=$CERT_FILE
 
-## Python
-export REQUESTS_CA_BUNDLE=$CERT_FILE
+# ## Python
+# export REQUESTS_CA_BUNDLE=$CERT_FILE
 #####################################################################
 
 # Python
@@ -127,7 +133,7 @@ export PIP_INDEX_URL=https://artifacts.tools.marketaxess.com/artifactory/api/pyp
 export PIP_ROOT_USER_ACTION=ignore
 
 # Go
-export GOPATH=/Users/mktxmac-kbiawat/Developer/workspaces/golang_ws
+export GOPATH=/Users/ikaran/Shelf/workspaces/golang_ws
 export PATH=$PATH:$GOPATH:$GOPATH/bin
 
 # Java

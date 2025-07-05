@@ -48,7 +48,7 @@ in {
       awscli2
       bat
       buildkit
-#      carapace #latest version not available on nix yet, broke nu from zsh
+#     carapace #latest version not available on nix yet, broke nu from zsh
       clojure
       colima
       cue

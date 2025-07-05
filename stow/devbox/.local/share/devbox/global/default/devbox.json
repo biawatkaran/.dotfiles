@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.11.0/.schema/devbox.schema.json",
+  "packages": {
+    "kind": "latest",
+    "gh":   "latest",
+    "starship": "latest",
+    "bat": "latest",
+    "zoxide": "latest",
+    "fzf": "latest",
+    "eza": "latest",
+    "thefuck": "latest",
+    "git": "latest",
+    "kubectl": "latest",
+    "k9s": "latest",
+    "kubectx": "latest",
+    "nushell": "latest",
+    "helm": {
+      "version":            "latest",
+      "excluded_platforms": ["aarch64-darwin"]
+    }
+  },
+  "shell": {
+    "init_hook": [],
+    "scripts":   {}
+  }
+}

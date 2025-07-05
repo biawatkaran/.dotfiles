@@ -13,39 +13,17 @@ fi
 # done
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.oh-my-zsh"
 
-# history
-HISTFILE=~/.zsh_history
-
-# plugins
-#commenting first three as giving dos2windows and add in home.nix
-plug "zsh-users/zsh-autosuggestions"
-plug "zsh-users/zsh-syntax-highlighting"
-# plug "zsh-users/zsh-history-substring-search"
-
-# plug "esc/conda-zsh-completion"
-# plug "hlissner/zsh-autopair"
-# plug "zap-zsh/supercharge"
-# plug "zap-zsh/vim"
-# plug "zap-zsh/zap-prompt"
-# plug "zap-zsh/fzf"
-# plug "zap-zsh/exa"
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-if command -v bat &> /dev/null; then
-  alias cat="bat -pp --theme \"Visual Studio Dark+\""
-  alias catt="bat --theme \"Visual Studio Dark+\""
-fi
 
 # keybinds
 #bindkey "^[[3~" delete-char
 #bindkey "^[[H" beginning-of-line
 #bindkey "^[[F" end-of-line
-#bindkey '^[[A' history-substring-search-up
-#bindkey '^[[B' history-substring-search-down
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
 # bindkey -M vicmd 'k' history-substring-search-up
 # bindkey -M vicmd 'j' history-substring-search-down
 # bindkey '^ ' autosuggest-accept
@@ -118,17 +96,32 @@ export UPDATE_ZSH_DAYS=1
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  aws
-  kubectl
-  docker
-  helm
-  golang
-  jfrog
-)
+# plugins=(
+#   git
+#   aws
+#   kubectl
+#   docker
+#   helm
+#   golang
+#   jfrog
+# )
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
+# end of oh-my-zsh configs
+
+# plugins
+#commenting first three as giving dos2windows and add in home.nix
+plug "zsh-users/zsh-autosuggestions"
+plug "zsh-users/zsh-syntax-highlighting"
+# plug "zsh-users/zsh-history-substring-search"
+
+# plug "esc/conda-zsh-completion"
+# plug "hlissner/zsh-autopair"
+# plug "zap-zsh/supercharge"
+# plug "zap-zsh/vim"
+# plug "zap-zsh/zap-prompt"
+# plug "zap-zsh/fzf"
+# plug "zap-zsh/exa"
 
 # source
 plug "$HOME/.config/zsh/aliases.zsh"
@@ -170,6 +163,36 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
 
+# Not in use, using zap instead
+# ### Added by Zinit's installer
+# if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+#     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+#     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+#     command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+#         print -P "%F{33} %F{34}Installation successful.%f%b" || \
+#         print -P "%F{160} The clone has failed.%f%b"
+# fi
+
+# source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+# autoload -Uz _zinit
+# (( ${+_comps} )) && _comps[zinit]=_zinit
+
+# # Load a few important annexes, without Turbo
+# # (this is currently required for annexes)
+# zinit light-mode for \
+#     zdharma-continuum/zinit-annex-as-monitor \
+#     zdharma-continuum/zinit-annex-bin-gem-node \
+#     zdharma-continuum/zinit-annex-patch-dl \
+#     zdharma-continuum/zinit-annex-rust
+
+# ### End of Zinit's installer chunk
+
+
+if command -v bat &> /dev/null; then
+  alias cat="bat -pp --theme \"Visual Studio Dark+\""
+  alias catt="bat --theme \"Visual Studio Dark+\""
+fi
+
 if [ -d "$HOME/bin" ] ; then
   PATH="$PATH:$HOME/bin"
 fi
@@ -187,9 +210,26 @@ if [ $(command -v direnv) ]; then
   eval "$(direnv hook zsh)"
 fi
 
+# Devbox
+DEVBOX_NO_PROMPT=true
+if [ $(command -v devbox) ]; then
+  eval "$(devbox global shellenv --init-hook)"
+fi
+
+
 # starship
 if [ $(command -v starship) ]; then
   eval "$(starship init zsh)"
+fi
+
+# The Fuck
+if [ $(command -v thefuck) ]; then
+  eval $(thefuck --alias)
+fi
+
+# Zoxide
+if [ $(command -v zoxide) ]; then
+  eval "$(zoxide init --cmd cd zsh)"
 fi
 
 # source global settings
@@ -225,6 +265,15 @@ compinit
 
 # for aws cli
 complete -C aws_completer aws
+
+# Completions
+source <(devbox completion zsh)
+source <(docker completion zsh)
+source <(kubectl completion zsh)
+
+# kubecolor
+compdef kubecolor=kubectl
+zstyle ':completion:*' menu yes select
 
 # Enable the completion system
 # autoload -U zmv

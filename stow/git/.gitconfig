@@ -16,7 +16,7 @@
 	reflog = delta
 	show = delta
 [user]
-	email = KBiawat@marketaxess.com
+	email = biawat.karan@gmail.com
 	name = Karan Biawat
 ; 	signingKey = ~/.ssh/id_ed25519.pub
 [core]
@@ -24,8 +24,8 @@
 	autocrlf = input
 	filemode = false
 [http]
-;     sslVerify = false
-    sslCAInfo = /etc/nix/ca_cert.pem
+    sslVerify = false
+;    sslCAInfo = /etc/nix/ca_cert.pem
 [color]
 	ui = true	
 [pull]

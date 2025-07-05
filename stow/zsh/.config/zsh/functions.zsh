@@ -207,7 +207,7 @@ function assume_role_arn() {
 function lets_aft() {
     assume_profile mktx-ct-core-aft_CloudBreakglassRole
 
-    local aws_account_id=<ACT>
+    local aws_account_id=ACT
     local aws_account_role=AWSAFTAdmin
 
     local aft_admin_arn=arn:aws:iam::${aws_account_id}:role/${aws_account_role}
